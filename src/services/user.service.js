@@ -37,7 +37,7 @@ class UserService {
         return axios.post('https://eu-central-1.aws.data.mongodb-api.com/app/data-tcely/endpoint/data/v1/action/insertOne', body);
     }
 
-    delete(id) {
+    deleteById(id) {
         const body = {
             collection: "user",
             database: "bongo-mlog",

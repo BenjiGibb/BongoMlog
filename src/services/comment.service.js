@@ -38,7 +38,7 @@ class CommentService {
         return axios.post('https://eu-central-1.aws.data.mongodb-api.com/app/data-tcely/endpoint/data/v1/action/insertOne', body);
     }
 
-    delete(id) {
+    deleteById(id) {
         const body = {
             collection: "comment",
             database: "bongo-mlog",
@@ -48,7 +48,7 @@ class CommentService {
         return axios.post('https://eu-central-1.aws.data.mongodb-api.com/app/data-tcely/endpoint/data/v1/action/deleteOne', body);
     }
 
-    updateById(id, title, content, userId, createdAt, blogId, updatedAt) {
+    updateById(id, title, content, userId, createdAt, blogId) {
         const body = {
             collection: "comment",
             database: "bongo-mlog",
