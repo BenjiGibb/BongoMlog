@@ -19,3 +19,8 @@
 #entry:hover {
     transform: scale(105%);
 }
+
+#content-wrapper {
+    margin-left: 1rem;
+    margin-top: 1rem;
+}

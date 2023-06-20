@@ -87,7 +87,7 @@ app.post(`/${entryPath}/`, (req, res) => {
 });
 
 app.delete(`/${entryPath}/`, (req, res) => {
-    axios.post(baseURL + 'deleteOne', {
+    axios.post(baseURL + 'deleteMany', {
         ...entryBody,
         filter: {
             ...req.body.filter
@@ -155,7 +155,7 @@ app.post(`/${commentPath}/`, (req, res) => {
 });
 
 app.delete(`/${commentPath}/`, (req, res) => {
-    axios.post(baseURL + 'deleteOne', {
+    axios.post(baseURL + 'deleteMany', {
         ...commentBody,
         filter: {
             ...req.body.filter
@@ -216,7 +216,7 @@ app.post(`/${userPath}/`, (req, res) => {
 });
 
 app.delete(`/${userPath}/`, (req, res) => {
-    axios.post(baseURL + 'deleteOne', {
+    axios.post(baseURL + 'deleteMany', {
         ...userBody,
         filter: {
             ...req.body.filter
