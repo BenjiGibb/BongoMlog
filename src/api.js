@@ -107,10 +107,7 @@ app.put(`/${entryPath}/`, (req, res) => {
             $set: {
                 title: req.query.title,
                 sub_title: req.query.sub_title,
-                content: req.query.content,
-                user_id: {
-                    $oid: req.query.user_id
-                },
+                content: req.query.content
                 created_at: req.query.created_at,
                 updated_at: new Date()
             }
@@ -177,14 +174,8 @@ app.put(`/${commentPath}/`, (req, res) => {
         update: {
             $set: {
                 title: req.query.title,
-                content: req.query.content,
-                user_id: {
-                    $oid: req.query.user_id
-                },
-                updated_at: new Date(),
-                blog_id: {
-                    $oid: req.query.blog_id
-                }
+                content: req.query.content
+                updated_at: new Date()
             }
         }
     }).then((result) => {
