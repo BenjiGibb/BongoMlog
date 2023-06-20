@@ -73,9 +73,11 @@ app.post(`/${entryPath}/`, (req, res) => {
         ...entryBody,
         document: {
             title: req.query.title,
-            sub_title: req.query.subTitle,
+            sub_title: req.query.sub_title,
             content: req.query.content,
-            user_id: parseInt(req.query.userId),
+            user_id: {
+                $oid: req.query.user_id
+            },
             created_at: new Date(),
             updated_at: new Date()
         }
@@ -104,10 +106,12 @@ app.put(`/${entryPath}/`, (req, res) => {
         update: {
             $set: {
                 title: req.query.title,
-                sub_title: req.query.subTitle,
+                sub_title: req.query.sub_title,
                 content: req.query.content,
-                user_id: parseInt(req.query.userId),
-                created_at: req.query.createdAt,
+                user_id: {
+                    $oid: req.query.user_id
+                },
+                created_at: req.query.created_at,
                 updated_at: new Date()
             }
         }
@@ -140,9 +144,13 @@ app.post(`/${commentPath}/`, (req, res) => {
         document: {
             title: req.query.title,
             content: req.query.content,
-            user_id: parseInt(req.query.userId),
+            user_id: {
+                $oid: req.query.user_id
+            },
             created_at: new Date(),
-            blog_id: parseInt(req.query.blogId)
+            blog_id: {
+                $oid: req.query.blog_id
+            }
         }
     }).then((result) => {
         res.json(result.data)
@@ -170,9 +178,13 @@ app.put(`/${commentPath}/`, (req, res) => {
             $set: {
                 title: req.query.title,
                 content: req.query.content,
-                user_id: parseInt(req.query.userId),
-                created_at: new Date(),
-                blog_id: parseInt(req.query.blogId)
+                user_id: {
+                    $oid: req.query.user_id
+                },
+                updated_at: new Date(),
+                blog_id: {
+                    $oid: req.query.blog_id
+                }
             }
         }
     }).then((result) => {
@@ -202,10 +214,10 @@ app.post(`/${userPath}/`, (req, res) => {
     axios.post(baseURL + 'insertOne', {
         ...userBody,
         document: {
-            first_name: req.query.firstName,
-            last_name: req.query.lastName,
+            first_name: req.query.first_name,
+            last_name: req.query.last_name,
             email: req.query.email,
-            birth_date: req.query.birthDate,
+            birth_date: req.query.birth_date,
         }
     }).then((result) => {
         res.json(result.data)
@@ -231,10 +243,10 @@ app.put(`/${userPath}/`, (req, res) => {
         },
         update: {
             $set: {
-                first_name: req.query.firstName,
-                last_name: req.query.lastName,
+                first_name: req.query.first_name,
+                last_name: req.query.last_name,
                 email: req.query.email,
-                birth_date: req.query.birthDate,
+                birth_date: req.query.birth_date,
             }
         }
     }).then((result) => {
