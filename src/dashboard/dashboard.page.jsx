@@ -12,23 +12,50 @@ export default function Dashboard() {
         sub_title: '',
         content: ''
     });
-    const [newPostedId, setNewPostedId] = useState(undefined);
+    const [currentPostId, setCurrentPostId] = useState(undefined);
+    const [offCanvasParams, setOffCanvasParams] = useState({
+        title: 'Neuer Post',
+        placement: 'start',
+        newPost: true
+    });
 
-    const handleClose = () => setShow(false);
+    function handleClose() {
+        setShow(false);
+        setFormState({
+            title: '',
+            sub_title: '',
+            content: ''
+        });
+        setOffCanvasParams({
+            title: 'Neuer Post',
+            placement: 'start',
+            newPost: true
+        });
+        setCurrentPostId(undefined);
+    }
+
     const handleShow = () => setShow(true);
 
     useEffect(() => {
         axios.get('http://localhost:8080/entry').then((res) => {
             setEntries(res.data.documents);
         });
-    }, [newPostedId]);
+    }, [currentPostId]);
+
+    function submitPost() {
+        if (offCanvasParams.newPost) {
+            uploadPost();
+        } else {
+            updatePost();
+        }
+    }
 
     function uploadPost() {
         handleClose();
         if (formState.title !== '' && formState.sub_title !== '' && formState.content !== '') {
             const params = `?title=${formState.title}&sub_title=${formState.sub_title}&content=${formState.content}&user_id=6481b75bd0aefbe149eece12`;
             axios.post('http://localhost:8080/entry' + params).then((res) => {
-                setNewPostedId(res.data.insertedId);
+                setCurrentPostId(res.data.insertedId);
                 console.info('Uploaded new post', res.data.insertedId);
             });
         }
@@ -48,6 +75,36 @@ export default function Dashboard() {
         });
     }
 
+    function prepareUpdatePost(id) {
+        setCurrentPostId(id);
+        setOffCanvasParams({
+            title: 'Post aktualisieren',
+            placement: 'end',
+            newPost: false
+        });
+        const entry = entries.find((filteredEntry) => filteredEntry['_id'] === id);
+        setFormState({
+            title: entry.title,
+            sub_title: entry.sub_title,
+            content: entry.content
+        });
+        handleShow();
+    }
+
+    function updatePost() {
+        const body = {
+            filter: {
+                _id: {
+                    $oid: currentPostId
+                }
+            }
+        };
+        const params = `?title=${formState.title}&sub_title=${formState.sub_title}&content=${formState.content}`;
+        axios.put('http://localhost:8080/entry' + params, body).then((res) => {
+            console.info(`Modified ${res.data.modifiedCount} objects`);
+        });
+    }
+
     if (entries) {
         return (
             <div id="content-wrapper">
@@ -63,9 +120,15 @@ export default function Dashboard() {
                                         <Card.Title>
                                             <div id="title-wrapper">
                                                 {entry.title}
-                                                <Button onClick={() => deletePost(entry['_id'])} variant={"danger"}>
-                                                    <i className="bi bi-trash3"></i>
-                                                </Button>
+                                                <div id="action-button-wrapper">
+                                                    <Button onClick={() => prepareUpdatePost(entry['_id'])}
+                                                            variant={"secondary"}>
+                                                        <i className="bi bi-pencil-square"></i>
+                                                    </Button>
+                                                    <Button onClick={() => deletePost(entry['_id'])} variant={"danger"}>
+                                                        <i className="bi bi-trash3"></i>
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </Card.Title>
                                         <Card.Subtitle className="mb-2 text-muted">{entry.sub_title}</Card.Subtitle>
@@ -84,35 +147,37 @@ export default function Dashboard() {
                         })
                     }
                 </div>
-                <Offcanvas show={show} onHide={handleClose}>
+                <Offcanvas show={show} onHide={handleClose} placement={offCanvasParams.placement}>
                     <Offcanvas.Header closeButton>
-                        <Offcanvas.Title>Neuer Post</Offcanvas.Title>
+                        <Offcanvas.Title>{offCanvasParams.title}</Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicTitle">
                                 <Form.Label>Titel</Form.Label>
-                                <Form.Control type="text" placeholder="Anzeigetitel" onChange={(e) => {
-                                    setFormState({
-                                        title: e.target.value,
-                                        sub_title: formState.sub_title,
-                                        content: formState.content
-                                    })
-                                }}/>
+                                <Form.Control type="text" placeholder="Anzeigetitel" value={formState.title}
+                                              onChange={(e) => {
+                                                  setFormState({
+                                                      title: e.target.value,
+                                                      sub_title: formState.sub_title,
+                                                      content: formState.content
+                                                  })
+                                              }}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicSubTitle">
                                 <Form.Label>Untertitel</Form.Label>
-                                <Form.Control type="text" placeholder="Untertitel"onChange={(e) => {
-                                    setFormState({
-                                        title: formState.title,
-                                        sub_title: e.target.value,
-                                        content: formState.content
-                                    })
-                                }}/>
+                                <Form.Control type="text" placeholder="Untertitel" value={formState.sub_title}
+                                              onChange={(e) => {
+                                                  setFormState({
+                                                      title: formState.title,
+                                                      sub_title: e.target.value,
+                                                      content: formState.content
+                                                  })
+                                              }}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicContent">
                                 <Form.Label>Inhalt</Form.Label>
-                                <Form.Control as="textarea" rows={3}onChange={(e) => {
+                                <Form.Control as="textarea" rows={10} value={formState.content} onChange={(e) => {
                                     setFormState({
                                         title: formState.title,
                                         sub_title: formState.sub_title,
@@ -120,7 +185,7 @@ export default function Dashboard() {
                                     })
                                 }}/>
                             </Form.Group>
-                            <Button variant="primary" onClick={uploadPost}>
+                            <Button variant="primary" onClick={submitPost}>
                                 Posten
                             </Button>
                         </Form>

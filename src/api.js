@@ -108,7 +108,6 @@ app.put(`/${entryPath}/`, (req, res) => {
                 title: req.query.title,
                 sub_title: req.query.sub_title,
                 content: req.query.content,
-                created_at: req.query.created_at,
                 updated_at: new Date()
             }
         }
