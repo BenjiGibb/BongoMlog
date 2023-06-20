@@ -107,7 +107,7 @@ app.put(`/${entryPath}/`, (req, res) => {
             $set: {
                 title: req.query.title,
                 sub_title: req.query.sub_title,
-                content: req.query.content
+                content: req.query.content,
                 created_at: req.query.created_at,
                 updated_at: new Date()
             }
@@ -174,7 +174,7 @@ app.put(`/${commentPath}/`, (req, res) => {
         update: {
             $set: {
                 title: req.query.title,
-                content: req.query.content
+                content: req.query.content,
                 updated_at: new Date()
             }
         }
