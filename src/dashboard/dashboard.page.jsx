@@ -5,6 +5,7 @@ import "./dashboard.style.css";
 import moment from "moment";
 
 export default function Dashboard() {
+    const url = 'http://localhost:8080/entry';
     const [entries, setEntries] = useState(undefined);
     const [show, setShow] = useState(false);
     const [formState, setFormState] = useState({
@@ -37,7 +38,7 @@ export default function Dashboard() {
     const handleShow = () => setShow(true);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/entry').then((res) => {
+        axios.get(url).then((res) => {
             setEntries(res.data.documents);
         });
     }, [currentPostId]);
@@ -54,7 +55,7 @@ export default function Dashboard() {
         handleClose();
         if (formState.title !== '' && formState.sub_title !== '' && formState.content !== '') {
             const params = `?title=${formState.title}&sub_title=${formState.sub_title}&content=${formState.content}&user_id=6481b75bd0aefbe149eece12`;
-            axios.post('http://localhost:8080/entry' + params).then((res) => {
+            axios.post(url + params).then((res) => {
                 setCurrentPostId(res.data.insertedId);
                 console.info('Uploaded new post', res.data.insertedId);
             });
@@ -69,7 +70,7 @@ export default function Dashboard() {
                 }
             }
         };
-        axios.delete('http://localhost:8080/entry', {data: body}).then((res) => {
+        axios.delete(url, {data: body}).then((res) => {
             console.info(`Deleted ${res.data.deletedCount} objects`);
             setEntries(entries.filter(entry => entry['_id'] !== id));
         });
@@ -100,7 +101,7 @@ export default function Dashboard() {
             }
         };
         const params = `?title=${formState.title}&sub_title=${formState.sub_title}&content=${formState.content}`;
-        axios.put('http://localhost:8080/entry' + params, body).then((res) => {
+        axios.put(url + params, body).then((res) => {
             console.info(`Modified ${res.data.modifiedCount} objects`);
         });
     }
