@@ -12,12 +12,18 @@
 #entry {
     margin: 1rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
-    transition: 0.5s;
+    transition: 0.2s;
     width: 50%;
 }
 
 #entry:hover {
     transform: scale(105%);
+}
+
+#title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #content-wrapper {

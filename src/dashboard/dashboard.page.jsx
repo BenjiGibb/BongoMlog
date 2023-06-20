@@ -34,6 +34,20 @@ export default function Dashboard() {
         }
     }
 
+    function deletePost(id) {
+        const body = {
+            filter: {
+                _id: {
+                    $oid: id
+                }
+            }
+        };
+        axios.delete('http://localhost:8080/entry', {data: body}).then((res) => {
+            console.info(`Deleted ${res.data.deletedCount} objects`);
+            setEntries(entries.filter(entry => entry['_id'] !== id));
+        });
+    }
+
     if (entries) {
         return (
             <div id="content-wrapper">
@@ -44,9 +58,16 @@ export default function Dashboard() {
                     {
                         entries.map((entry) => {
                             return (
-                                <Card id="entry" key={entry.id}>
+                                <Card id="entry" key={entry['_id']}>
                                     <Card.Body>
-                                        <Card.Title>{entry.title}</Card.Title>
+                                        <Card.Title>
+                                            <div id="title-wrapper">
+                                                {entry.title}
+                                                <Button onClick={() => deletePost(entry['_id'])} variant={"danger"}>
+                                                    <i className="bi bi-trash3"></i>
+                                                </Button>
+                                            </div>
+                                        </Card.Title>
                                         <Card.Subtitle className="mb-2 text-muted">{entry.sub_title}</Card.Subtitle>
                                         <Card.Text>
                                             {entry.content}
