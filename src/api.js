@@ -72,7 +72,6 @@ app.post(`/${entryPath}/`, (req, res) => {
     axios.post(baseURL + 'insertOne', {
         ...entryBody,
         document: {
-            id: parseInt(req.query.id),
             title: req.query.title,
             sub_title: req.query.subTitle,
             content: req.query.content,
@@ -139,7 +138,6 @@ app.post(`/${commentPath}/`, (req, res) => {
     axios.post(baseURL + 'insertOne', {
         ...commentBody,
         document: {
-            id: parseInt(req.query.id),
             title: req.query.title,
             content: req.query.content,
             user_id: parseInt(req.query.userId),
@@ -204,7 +202,6 @@ app.post(`/${userPath}/`, (req, res) => {
     axios.post(baseURL + 'insertOne', {
         ...userBody,
         document: {
-            id: parseInt(req.query.id),
             first_name: req.query.firstName,
             last_name: req.query.lastName,
             email: req.query.email,
