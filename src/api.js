@@ -31,17 +31,37 @@ const entryBody = {
     dataSource: "Cluster0"
 }
 
-app.get(`/${entryPath}/`, (req, res) => {
-    axios.post(baseURL + 'find', entryBody).then((result) => {
-        res.json(result.data);
-    });
-});
+/**
+ * Filter example
+ * Documents are filtered by the filter-field in the request-body.
+ *
+ * Filter by id:
+ * {
+ *     "filter": {
+ *         "_id": {
+ *             "$oid": "64906b7e321ef7b245414d16"
+ *         }
+ *     }
+ * }
+ *
+ * Filter by title:
+ * {
+ *     "filter": {
+ *         "title": "Testartikel"
+ *     }
+ * }
+ *
+ * etc...
+ *
+ * The fields in filter are automatically getting mapped and filtered.
+ *
+ */
 
-app.get(`/${entryPath}/:id`, (req, res) => {
+app.get(`/${entryPath}/`, (req, res) => {
     axios.post(baseURL + 'find', {
         ...entryBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         }
     }).then((result) => {
         res.json(result.data);
@@ -65,22 +85,22 @@ app.post(`/${entryPath}/`, (req, res) => {
     });
 });
 
-app.delete(`/${entryPath}/:id`, (req, res) => {
+app.delete(`/${entryPath}/`, (req, res) => {
     axios.post(baseURL + 'deleteOne', {
         ...entryBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         }
     }).then((result) => {
         res.json(result.data);
     });
 });
 
-app.put(`/${entryPath}/:id`, (req, res) => {
+app.put(`/${entryPath}/`, (req, res) => {
     axios.post(baseURL + 'updateOne', {
         ...entryBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         },
         update: {
             $set: {
@@ -105,16 +125,10 @@ const commentBody = {
 }
 
 app.get(`/${commentPath}/`, (req, res) => {
-    axios.post(baseURL + 'find', commentBody).then((result) => {
-        res.json(result.data);
-    });
-});
-
-app.get(`/${commentPath}/:id`, (req, res) => {
     axios.post(baseURL + 'find', {
         ...commentBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         }
     }).then((result) => {
         res.json(result.data);
@@ -137,22 +151,22 @@ app.post(`/${commentPath}/`, (req, res) => {
     });
 });
 
-app.delete(`/${commentPath}/:id`, (req, res) => {
+app.delete(`/${commentPath}/`, (req, res) => {
     axios.post(baseURL + 'deleteOne', {
         ...commentBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         }
     }).then((result) => {
         res.json(result.data);
     });
 });
 
-app.put(`/${commentPath}/:id`, (req, res) => {
+app.put(`/${commentPath}/`, (req, res) => {
     axios.post(baseURL + 'updateOne', {
         ...commentBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         },
         update: {
             $set: {
@@ -176,16 +190,10 @@ const userBody = {
 }
 
 app.get(`/${userPath}/`, (req, res) => {
-    axios.post(baseURL + 'find', userBody).then((result) => {
-        res.json(result.data);
-    });
-});
-
-app.get(`/${userPath}/:id`, (req, res) => {
     axios.post(baseURL + 'find', {
         ...userBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         }
     }).then((result) => {
         res.json(result.data);
@@ -207,22 +215,22 @@ app.post(`/${userPath}/`, (req, res) => {
     });
 });
 
-app.delete(`/${userPath}/:id`, (req, res) => {
+app.delete(`/${userPath}/`, (req, res) => {
     axios.post(baseURL + 'deleteOne', {
         ...userBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         }
     }).then((result) => {
         res.json(result.data);
     });
 });
 
-app.put(`/${userPath}/:id`, (req, res) => {
+app.put(`/${userPath}/`, (req, res) => {
     axios.post(baseURL + 'updateOne', {
         ...userBody,
         filter: {
-            id: parseInt(req.params.id)
+            ...req.body.filter
         },
         update: {
             $set: {

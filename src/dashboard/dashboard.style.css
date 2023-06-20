@@ -1,0 +1,21 @@
+#entries {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#entry {
+    margin: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+    transition: 0.5s;
+    width: 50%;
+}
+
+#entry:hover {
+    transform: scale(105%);
+}
